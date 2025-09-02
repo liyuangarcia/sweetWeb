@@ -6,6 +6,7 @@ import {
   createWebHashHistory,
 } from 'vue-router'
 import routes from './routes'
+import { LocalStorage } from 'quasar'
 
 /*
  * If not building with SSR mode, you can
@@ -31,6 +32,22 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  })
+
+  Router.beforeEach((to, from, next) => {
+    // Verificar el estado de autenticación
+    const isAuthenticated = !!LocalStorage.getItem('access_token')
+
+    if (to.meta.requiresAuth && !isAuthenticated) {
+      // Si la ruta requiere autenticación pero el usuario no está autenticado
+      next('/login')
+    } else if (to.meta.requiresGuest && isAuthenticated) {
+      // Si la ruta requiere ser invitado pero el usuario está autenticado
+      next('/main') // o '/dashboard' dependiendo de tu flujo
+    } else {
+      // Continuar normalmente
+      next()
+    }
   })
 
   return Router

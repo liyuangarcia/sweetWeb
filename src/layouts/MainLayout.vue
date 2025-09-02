@@ -1,22 +1,49 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
+      <q-toolbar class="bg-red-9 text-white">
+        <q-btn flat round dense icon="menu" class="q-mr-sm" />
+        <q-separator v-if="!isLoginPage" dark vertical inset />
+        <q-btn v-if="!isLoginPage" stretch flat label="Inicio" to="/main" />
+        <q-btn v-if="!isLoginPage" stretch flat label="Reservas" to="/reservas" />
+        <q-separator v-if="!isLoginPage" dark vertical inset />
+        <q-btn
+          v-if="!isLoginPage"
+          stretch
+          flat
+          label="Mantenimiento"
+          to="/maintenance"
+          icon="handyman"
+        />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-space />
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn-dropdown v-if="!isLoginPage" stretch flat :label="getUser()">
+          <q-list>
+            <q-item-label header>Perfil</q-item-label>
+            <q-item clickable v-close-popup tabindex="0">
+              <q-item-section avatar>
+                <q-avatar icon="person" color="secondary" text-color="white" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Datos del usuario</q-item-label>
+                <q-item-label caption>Perfil del usuario</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-separator inset spaced />
+            <q-item clickable v-close-popup tabindex="0" @click="logout()">
+              <q-item-section avatar>
+                <q-avatar icon="logout" color="primary" text-color="white" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Salir</q-item-label>
+                <q-item-label caption>Cerrar sesion</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-toolbar>
     </q-header>
-
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
-        <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
-      </q-list>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -25,57 +52,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { LocalStorage } from 'quasar'
+import { api } from 'boot/axios'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-]
+//import { ref } from 'vue'
+const route = useRoute()
+const router = useRouter()
 
-const leftDrawerOpen = ref(false)
+const API_URL = 'http://localhost:8000/api/auth'
 
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+const isLoginPage = computed(() => {
+  return route.name === 'login' || route.path === '/login'
+})
+
+const getUser = () => {
+  const userStr = LocalStorage.getItem('user')
+  return userStr ? JSON.parse(userStr).username : null
+}
+
+const logout = async () => {
+  try {
+    await api.post(`${API_URL}/logout/`)
+    router.push('/login')
+  } catch (error) {
+    console.error('Logout error:', error)
+  } finally {
+    // Limpiar localStorage
+    LocalStorage.remove('access_token')
+    LocalStorage.remove('refresh_token')
+    LocalStorage.remove('user')
+    delete api.defaults.headers.common['Authorization']
+  }
 }
 </script>
