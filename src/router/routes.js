@@ -33,6 +33,17 @@ const routes = [
         path: '/airport',
         component: () => import('src/pages/AeropuertoPage.vue'),
         meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editairport/:slug',
+        component: () => import('src/pages/AeropuertoPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
       },
     ],
   },

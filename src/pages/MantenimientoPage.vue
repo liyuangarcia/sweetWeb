@@ -63,14 +63,26 @@
                       <q-table :rows="airports" :columns="airportcolums" row-key="id" flat bordered>
                         <template v-slot:body-cell-actions="props">
                           <q-td :props="props" class="text-center">
-                            <q-btn
-                              icon="delete"
-                              color="red-10"
-                              size="sm"
-                              round
-                              dense
-                              @click="deleteRow(props.row)"
-                            />
+                            <div class="q-gutter-xs">
+                              <q-btn
+                                icon="delete"
+                                color="red-10"
+                                size="sm"
+                                round
+                                dense
+                                title="Eliminar"
+                                @click="deleteAirport(props.row)"
+                              />
+                              <q-btn
+                                icon="edit"
+                                color="grey"
+                                size="sm"
+                                round
+                                dense
+                                title="Editar"
+                                @click="editAirport(props.row)"
+                              />
+                            </div>
                           </q-td>
                         </template>
                       </q-table>
@@ -123,8 +135,10 @@
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 
+const router = useRouter()
 const $q = useQuasar()
 
 const tab = ref('airports')
@@ -153,7 +167,11 @@ onMounted(() => {
   getAirports()
 })
 
-const deleteRow = (row) => {
+const editAirport = (row) => {
+  router.push(`/editairport/${row.slug}`)
+}
+
+const deleteAirport = (row) => {
   $q.dialog({
     title: 'Confirmar eliminación',
     message: `¿Estás seguro de eliminar ${row.aaerodescripcion})?`,
