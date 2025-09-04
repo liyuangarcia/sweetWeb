@@ -25,7 +25,7 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: '/maintenance',
+        path: '/maintenance/:tabName/:exItem',
         component: () => import('src/pages/MantenimientoPage.vue'),
         meta: { requiresAuth: true },
       },
@@ -40,6 +40,54 @@ const routes = [
       {
         path: '/editairport/:slug',
         component: () => import('src/pages/AeropuertoPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/guia',
+        component: () => import('src/pages/GuiaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editguia/:slug',
+        component: () => import('src/pages/GuiaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/destpesca',
+        component: () => import('src/pages/DestPescaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editdestpesca/:slug',
+        component: () => import('src/pages/DestPescaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/tipopesca',
+        component: () => import('src/pages/TipoPescaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/edittipopesca/:slug',
+        component: () => import('src/pages/TipoPescaPage.vue'),
         meta: { requiresAuth: true },
         props: {
           isEditing: true,

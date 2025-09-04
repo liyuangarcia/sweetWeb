@@ -12,7 +12,7 @@
           stretch
           flat
           label="Mantenimiento"
-          to="/maintenance"
+          to="/maintenance/airports/exi-airports"
           icon="handyman"
         />
 

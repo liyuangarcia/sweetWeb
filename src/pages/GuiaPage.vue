@@ -5,45 +5,18 @@
         <q-page class="q-pa-md">
           <div class="page-container">
             <div class="filter-section">
-              <div class="text-h6">Agregar aeropuerto</div>
+              <div class="text-h6">Agregar Guia</div>
               <q-separator class="q-my-md" />
 
               <div class="row q-col-gutter-md">
                 <div class="col-12 col-sm-6 col-md-3">
                   <q-input
                     filled
-                    v-model="aeropuerto.aaerodescripcion"
-                    label="Aeropuerto"
+                    v-model="guia.GNOMBREDELGUIA"
+                    label="Nombre del Guia"
                     dense
-                    ref="refaeropuerto"
+                    ref="refGNOMBREDELGUIA"
                     :rules="[(val) => !!val || 'Valor requerido']"
-                  >
-                  </q-input>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                  <q-input
-                    filled
-                    v-model="aeropuerto.alugar"
-                    label="Ubicacion"
-                    dense
-                    ref="refalugar"
-                    :rules="[(val) => !!val || 'Valor requerido']"
-                  >
-                  </q-input>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                  <q-input
-                    filled
-                    v-model="aeropuerto.asiglas"
-                    label="Siglas"
-                    dense
-                    ref="refasiglas"
-                    maxlength="3"
-                    @update:model-value="convertToUpper"
-                    :rules="[
-                      (val) => (val && val.length === 3) || 'Debe tener exactamente 3 caracteres',
-                      (val) => /^[A-Z]+$/.test(val) || 'Solo letras mayúsculas permitidas',
-                    ]"
                   >
                   </q-input>
                 </div>
@@ -51,14 +24,14 @@
 
               <div class="row justify-end q-mt-md">
                 <q-btn
-                  @click="createAirport()"
+                  @click="createGuia()"
                   color="red-10"
                   :label="btnLabel"
                   icon="add"
                   class="q-mr-md"
                 />
                 <q-btn
-                  @click="backairports()"
+                  @click="backguia()"
                   color="grey"
                   icon="arrow_back"
                   label="Regresar"
@@ -82,9 +55,7 @@ import { useQuasar } from 'quasar'
 const $q = useQuasar()
 const router = useRouter()
 const route = useRoute()
-const refaeropuerto = ref(null)
-const refalugar = ref(null)
-const refasiglas = ref(null)
+const refGNOMBREDELGUIA = ref(null)
 
 const slug = ref(route.params.slug)
 
@@ -95,11 +66,9 @@ const props = defineProps({
   },
 })
 
-const aeropuerto = ref({
+const guia = ref({
   id: null,
-  aaerodescripcion: '',
-  alugar: '',
-  asiglas: '',
+  GNOMBREDELGUIA: '',
   slug: '',
 })
 
@@ -107,15 +76,15 @@ onMounted(() => {
   if (props.isEditing) loadEdit()
 
   nextTick(() => {
-    refaeropuerto.value.focus()
+    refGNOMBREDELGUIA.value.focus()
   })
 })
 
 const loadEdit = () => {
   api
-    .get(`/airports/${slug.value}`)
+    .get(`/guiaspesca/${slug.value}`)
     .then((response) => {
-      aeropuerto.value = response.data
+      guia.value = response.data
     })
     .catch((error) => {
       console.log(error)
@@ -124,41 +93,35 @@ const loadEdit = () => {
 
 const btnLabel = props.isEditing ? ref('Modificar') : ref('Agregar')
 
-const backairports = () => {
-  router.push('/maintenance/airports')
-}
-
-const convertToUpper = (newValue) => {
-  aeropuerto.value.asiglas = newValue.toUpperCase().slice(0, 3)
+const backguia = () => {
+  router.push('/maintenance/ships/guias')
 }
 
 const validateInput = () => {
-  refaeropuerto.value.validate()
-  refalugar.value.validate()
-  refasiglas.value.validate()
-  return aeropuerto.value.aaerodescripcion && aeropuerto.value.alugar && aeropuerto.value.asiglas
+  refGNOMBREDELGUIA.value.validate()
+  return guia.value.GNOMBREDELGUIA
 }
 
-const createAirport = async () => {
+const createGuia = async () => {
   if (validateInput()) {
     if (props.isEditing) {
       try {
-        const response = await api.put(`/airports/${slug.value}/`, aeropuerto.value)
+        const response = await api.put(`/guiaspesca/${slug.value}/`, guia.value)
 
         $q.notify({
           type: 'positive',
-          message: '¡Aeropuerto actualizado correctamente!',
+          message: '¡Guia actualizado correctamente!',
           caption: 'Aeropuerto',
         })
 
-        backairports()
+        backguia()
         return response.data
       } catch (error) {
-        console.error('Error actualizando aeropuerto:', error)
+        console.error('Error actualizando Guia:', error)
 
         $q.notify({
           type: 'negative',
-          message: 'Error al actualizar el aeropuerto',
+          message: 'Error al actualizar el Guia',
           caption: error.response?.data?.message || 'Intenta nuevamente',
         })
 
@@ -166,14 +129,14 @@ const createAirport = async () => {
       }
     } else {
       api
-        .post(`/airports/`, aeropuerto.value)
+        .post(`/guiaspesca/`, guia.value)
         .then(() => {
           $q.notify({
             type: 'positive',
-            message: '¡Creado el aeropuerto correctamente!',
-            caption: 'Aeropuerto',
+            message: '¡Creado el Guia correctamente!',
+            caption: 'Guia',
           })
-          backairports()
+          backguia()
         })
         .catch((error) => {
           console.log(error)
