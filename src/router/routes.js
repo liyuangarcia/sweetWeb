@@ -93,6 +93,22 @@ const routes = [
           isEditing: true,
         },
       },
+      {
+        path: '/regionespesca',
+        component: () => import('src/pages/RegionesPescaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editregionespesca/:slug',
+        component: () => import('src/pages/RegionesPescaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
     ],
   },
   //

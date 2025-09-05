@@ -373,23 +373,136 @@
                     </q-list>
                   </q-tab-panel>
 
-                  <q-tab-panel name="movies">
+                  <q-tab-panel name="destinations">
                     <div class="text-h4 q-mb-md">Destinos</div>
-                    <p>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium
-                      cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi
-                      minima assumenda consectetur culpa fuga nulla ullam. In, libero.
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium
-                      cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi
-                      minima assumenda consectetur culpa fuga nulla ullam. In, libero.
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium
-                      cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi
-                      minima assumenda consectetur culpa fuga nulla ullam. In, libero.
-                    </p>
+                    <q-list bordered class="rounded-borders">
+                      <q-expansion-item
+                        expand-separator
+                        icon="perm_identity"
+                        label="Regiones de Pesca"
+                        v-model="exRegionesPesca"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Regiones de Pesca</div>
+                            <q-btn
+                              to="/regionespesca"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getRegionesPesca()"
+                                    filled
+                                    v-model="regionespesca_search"
+                                    label="Regiones de Pesca"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getRegionesPesca()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearRegionesPesca()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="regionespesca"
+                                :columns="regionespescacolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteRegionesPesca(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editRegionesPesca(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+
+                      <q-expansion-item
+                        expand-separator
+                        icon="sailing"
+                        v-model="exDestPesca"
+                        label="Destinos o polos turisticos"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Destinos o polos turisticos</div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+
+                      <q-expansion-item
+                        expand-separator
+                        icon="drafts"
+                        v-model="exTipoPesca"
+                        label="Polos de pesca para los transfers"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Polos de pesca para los transfers</div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+
+                      <q-expansion-item
+                        expand-separator
+                        v-model="exTipoPesca"
+                        icon="assessment"
+                        label="Marinas"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Marinas</div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+                    </q-list>
                   </q-tab-panel>
                 </q-tab-panels>
               </template>
@@ -419,6 +532,7 @@ const tab = ref('airports')
 const exGuias = ref(false)
 const exDestPesca = ref(false)
 const exTipoPesca = ref(false)
+const exRegionesPesca = ref(false)
 
 const splitterModel = ref(20)
 
@@ -503,6 +617,24 @@ const tipopescacolums = ref([
   },
 ])
 
+const regionespesca_search = ref('')
+const regionespesca = ref([])
+const regionespescacolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'REGIONES',
+    align: 'left',
+    label: 'Regiones de Pesca',
+    field: 'REGIONES',
+    sortable: true,
+  },
+])
+
 onMounted(() => {
   if (tabName.value) tab.value = tabName.value
   expItem()
@@ -510,12 +642,14 @@ onMounted(() => {
   getGuias()
   getDestPesca()
   getTipoPesca()
+  getRegionesPesca()
 })
 
 const expItem = () => {
   exGuias.value = exItem.value == 'guias' ? true : false
   exDestPesca.value = exItem.value == 'destpesca' ? true : false
   exTipoPesca.value = exItem.value == 'tipopesca' ? true : false
+  exRegionesPesca.value = exItem.value == 'regionespesca' ? true : false
 }
 
 const editAirport = (row) => {
@@ -529,6 +663,9 @@ const editDestPesca = (row) => {
 }
 const editTipoPesca = (row) => {
   router.push(`/edittipopesca/${row.slug}`)
+}
+const editRegionesPesca = (row) => {
+  router.push(`/editregionespesca/${row.slug}`)
 }
 
 const deleteAirport = (row) => {
@@ -616,6 +753,28 @@ const deleteTipoPesca = (row) => {
   })
 }
 
+const deleteRegionesPesca = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.REGIONES}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    regionespesca.value = regionespesca.value.filter((region) => region.id !== row.id)
+    api
+      .delete(`/regionespesca/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Region de pesca eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
+
 const clearAirports = () => {
   if (airport_search.value) {
     airport_search.value = ''
@@ -638,6 +797,12 @@ const clearTipoPesca = () => {
   if (tipopesca_search.value) {
     tipopesca_search.value = ''
     getTipoPesca()
+  }
+}
+const clearRegionesPesca = () => {
+  if (regionespesca_search.value) {
+    regionespesca_search.value = ''
+    getRegionesPesca()
   }
 }
 
@@ -679,6 +844,17 @@ const getTipoPesca = async () => {
     .get(`/tipopesca/?search=${tipopesca_search.value}`)
     .then((response) => {
       tipopesca.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getRegionesPesca = async () => {
+  api
+    .get(`/regionespesca/?search=${regionespesca_search.value}`)
+    .then((response) => {
+      regionespesca.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {
