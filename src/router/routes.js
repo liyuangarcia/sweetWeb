@@ -109,6 +109,38 @@ const routes = [
           isEditing: true,
         },
       },
+      {
+        path: '/destinos',
+        component: () => import('src/pages/DestinoPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editdestino/:slug',
+        component: () => import('src/pages/DestinoPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/marinas',
+        component: () => import('src/pages/MarinaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editmarina/:slug',
+        component: () => import('src/pages/MarinaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
     ],
   },
   //

@@ -467,12 +467,87 @@
                       <q-expansion-item
                         expand-separator
                         icon="sailing"
-                        v-model="exDestPesca"
+                        v-model="exDestinos"
                         label="Destinos o polos turisticos"
                       >
                         <q-card>
                           <q-card-section>
                             <div class="text-h4 q-mb-md">Destinos o polos turisticos</div>
+                            <q-btn
+                              to="/destinos"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getDestinos()"
+                                    filled
+                                    v-model="destinos_search"
+                                    label="Destinos"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getDestinos()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearDestinos()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="destinos"
+                                :columns="destinoscolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteDestinos(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editDestinos(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
                           </q-card-section>
                         </q-card>
                       </q-expansion-item>
@@ -492,13 +567,88 @@
 
                       <q-expansion-item
                         expand-separator
-                        v-model="exTipoPesca"
+                        v-model="exMarinas"
                         icon="assessment"
                         label="Marinas"
                       >
                         <q-card>
                           <q-card-section>
                             <div class="text-h4 q-mb-md">Marinas</div>
+                            <q-btn
+                              to="/marinas"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getMarinas()"
+                                    filled
+                                    v-model="marinas_search"
+                                    label="Marinas"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getMarinas()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearMarinas()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="marinas"
+                                :columns="marinascolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteMarinas(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editMarinas(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
                           </q-card-section>
                         </q-card>
                       </q-expansion-item>
@@ -533,6 +683,8 @@ const exGuias = ref(false)
 const exDestPesca = ref(false)
 const exTipoPesca = ref(false)
 const exRegionesPesca = ref(false)
+const exDestinos = ref(false)
+const exMarinas = ref(false)
 
 const splitterModel = ref(20)
 
@@ -635,6 +787,56 @@ const regionespescacolums = ref([
   },
 ])
 
+const destinos_search = ref('')
+const destinos = ref([])
+const destinoscolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'DESTINO',
+    align: 'left',
+    label: 'Destinos',
+    field: 'DESTINO',
+    sortable: true,
+  },
+])
+
+const marinas_search = ref('')
+const marinas = ref([])
+const marinascolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'Lmarina',
+    align: 'left',
+    label: 'Lmarina',
+    field: 'Lmarina',
+    sortable: true,
+  },
+  {
+    name: 'Nmarina',
+    align: 'left',
+    label: 'Nmarina',
+    field: 'Nmarina',
+    sortable: true,
+  },
+  {
+    name: 'NoficialMarina',
+    align: 'left',
+    label: 'NoficialMarina',
+    field: 'NoficialMarina',
+    sortable: true,
+  },
+])
+
 onMounted(() => {
   if (tabName.value) tab.value = tabName.value
   expItem()
@@ -643,6 +845,8 @@ onMounted(() => {
   getDestPesca()
   getTipoPesca()
   getRegionesPesca()
+  getDestinos()
+  getMarinas()
 })
 
 const expItem = () => {
@@ -650,6 +854,8 @@ const expItem = () => {
   exDestPesca.value = exItem.value == 'destpesca' ? true : false
   exTipoPesca.value = exItem.value == 'tipopesca' ? true : false
   exRegionesPesca.value = exItem.value == 'regionespesca' ? true : false
+  exDestinos.value = exItem.value == 'destinos' ? true : false
+  exMarinas.value = exItem.value == 'marinas' ? true : false
 }
 
 const editAirport = (row) => {
@@ -666,6 +872,12 @@ const editTipoPesca = (row) => {
 }
 const editRegionesPesca = (row) => {
   router.push(`/editregionespesca/${row.slug}`)
+}
+const editDestinos = (row) => {
+  router.push(`/editdestino/${row.slug}`)
+}
+const editMarinas = (row) => {
+  router.push(`/editmarina/${row.slug}`)
 }
 
 const deleteAirport = (row) => {
@@ -752,7 +964,6 @@ const deleteTipoPesca = (row) => {
       })
   })
 }
-
 const deleteRegionesPesca = (row) => {
   $q.dialog({
     title: 'Confirmar eliminación',
@@ -767,6 +978,48 @@ const deleteRegionesPesca = (row) => {
         $q.notify({
           type: 'positive',
           message: 'Region de pesca eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
+const deleteDestinos = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.DESTINO}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    destinos.value = destinos.value.filter((destino) => destino.id !== row.id)
+    api
+      .delete(`/destinos/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Destino eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
+const deleteMarinas = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.Nmarina}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    marinas.value = marinas.value.filter((marina) => marina.id !== row.id)
+    api
+      .delete(`/marinas/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Marina eliminado correctamente',
         })
       })
       .catch((error) => {
@@ -803,6 +1056,18 @@ const clearRegionesPesca = () => {
   if (regionespesca_search.value) {
     regionespesca_search.value = ''
     getRegionesPesca()
+  }
+}
+const clearDestinos = () => {
+  if (destinos_search.value) {
+    destinos_search.value = ''
+    getDestinos()
+  }
+}
+const clearMarinas = () => {
+  if (marinas_search.value) {
+    marinas_search.value = ''
+    getMarinas()
   }
 }
 
@@ -855,6 +1120,28 @@ const getRegionesPesca = async () => {
     .get(`/regionespesca/?search=${regionespesca_search.value}`)
     .then((response) => {
       regionespesca.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getDestinos = async () => {
+  api
+    .get(`/destinos/?search=${destinos_search.value}`)
+    .then((response) => {
+      destinos.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getMarinas = async () => {
+  api
+    .get(`/marinas/?search=${marinas_search.value}`)
+    .then((response) => {
+      marinas.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {
