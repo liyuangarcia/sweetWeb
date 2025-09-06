@@ -125,7 +125,7 @@ const loadEdit = () => {
 const btnLabel = props.isEditing ? ref('Modificar') : ref('Agregar')
 
 const backairports = () => {
-  router.push('/maintenance/airports')
+  router.push('/maintenance/airports/airports')
 }
 
 const convertToUpper = (newValue) => {
