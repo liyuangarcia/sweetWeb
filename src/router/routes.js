@@ -141,6 +141,38 @@ const routes = [
           isEditing: true,
         },
       },
+      {
+        path: '/lanchasregion',
+        component: () => import('src/pages/LanchaRegionPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editlancharegion/:slug',
+        component: () => import('src/pages/LanchaRegionPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/polospesca',
+        component: () => import('src/pages/PoloPescaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editpolopesca/:slug',
+        component: () => import('src/pages/PoloPescaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
     ],
   },
   //

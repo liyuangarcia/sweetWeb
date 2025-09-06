@@ -360,13 +360,89 @@
                         </q-card>
                       </q-expansion-item>
 
-                      <q-expansion-item icon="assessment" label="Lanchas por Region">
+                      <q-expansion-item
+                        icon="assessment"
+                        label="Lanchas por Region"
+                        v-model="exLanchasRegion"
+                      >
                         <q-card>
                           <q-card-section>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius
-                            reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum
-                            officiis modi facere maiores architecto suscipit iste eveniet doloribus
-                            ullam aliquid.
+                            <div class="text-h4 q-mb-md">Lanchas por Region</div>
+                            <q-btn
+                              to="/lanchasregion"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getLanchasRegion()"
+                                    filled
+                                    v-model="lanchasregion_search"
+                                    label="Lanchas por region"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getLanchasRegion()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearLanchasRegion()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="lanchasregion"
+                                :columns="lanchasregioncolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteLanchasRegion(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editLanchasRegion(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
                           </q-card-section>
                         </q-card>
                       </q-expansion-item>
@@ -555,12 +631,87 @@
                       <q-expansion-item
                         expand-separator
                         icon="drafts"
-                        v-model="exTipoPesca"
+                        v-model="exPolosPesca"
                         label="Polos de pesca para los transfers"
                       >
                         <q-card>
                           <q-card-section>
                             <div class="text-h4 q-mb-md">Polos de pesca para los transfers</div>
+                            <q-btn
+                              to="/polospesca"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getPolosPesca()"
+                                    filled
+                                    v-model="polospesca_search"
+                                    label="Polos"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getPolosPesca()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearPolosPesca()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="polospesca"
+                                :columns="polospescacolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deletePoloPesca(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editPoloPesca(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
                           </q-card-section>
                         </q-card>
                       </q-expansion-item>
@@ -685,6 +836,8 @@ const exTipoPesca = ref(false)
 const exRegionesPesca = ref(false)
 const exDestinos = ref(false)
 const exMarinas = ref(false)
+const exLanchasRegion = ref(false)
+const exPolosPesca = ref(false)
 
 const splitterModel = ref(20)
 
@@ -837,6 +990,56 @@ const marinascolums = ref([
   },
 ])
 
+const lanchasregion_search = ref('')
+const lanchasregion = ref([])
+const lanchasregioncolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'regionestext',
+    align: 'left',
+    label: 'Region',
+    field: 'regionestext',
+    sortable: true,
+  },
+  {
+    name: 'SumaDeLANCHAS',
+    align: 'left',
+    label: 'Suma de Lanchas',
+    field: 'SumaDeLANCHAS',
+    sortable: true,
+  },
+])
+
+const polospesca_search = ref('')
+const polospesca = ref([])
+const polospescacolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'DESTINO',
+    align: 'left',
+    label: 'Destino',
+    field: 'DESTINO',
+    sortable: true,
+  },
+  {
+    name: 'regionestext',
+    align: 'left',
+    label: 'Region',
+    field: 'regionestext',
+    sortable: true,
+  },
+])
+
 onMounted(() => {
   if (tabName.value) tab.value = tabName.value
   expItem()
@@ -847,6 +1050,8 @@ onMounted(() => {
   getRegionesPesca()
   getDestinos()
   getMarinas()
+  getLanchasRegion()
+  getPolosPesca()
 })
 
 const expItem = () => {
@@ -856,6 +1061,8 @@ const expItem = () => {
   exRegionesPesca.value = exItem.value == 'regionespesca' ? true : false
   exDestinos.value = exItem.value == 'destinos' ? true : false
   exMarinas.value = exItem.value == 'marinas' ? true : false
+  exLanchasRegion.value = exItem.value == 'lanchasregion' ? true : false
+  exPolosPesca.value = exItem.value == 'polospesca' ? true : false
 }
 
 const editAirport = (row) => {
@@ -878,6 +1085,12 @@ const editDestinos = (row) => {
 }
 const editMarinas = (row) => {
   router.push(`/editmarina/${row.slug}`)
+}
+const editLanchasRegion = (row) => {
+  router.push(`/editlancharegion/${row.slug}`)
+}
+const editPoloPesca = (row) => {
+  router.push(`/editpolopesca/${row.slug}`)
 }
 
 const deleteAirport = (row) => {
@@ -1027,6 +1240,48 @@ const deleteMarinas = (row) => {
       })
   })
 }
+const deleteLanchasRegion = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.regionestext}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    lanchasregion.value = lanchasregion.value.filter((lancha) => lancha.id !== row.id)
+    api
+      .delete(`/lanchasregion/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Lanchas eliminada correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
+const deletePoloPesca = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.DESTINO}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    polospesca.value = polospesca.value.filter((polo) => polo.id !== row.id)
+    api
+      .delete(`/destpesca/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Polo eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
 
 const clearAirports = () => {
   if (airport_search.value) {
@@ -1068,6 +1323,18 @@ const clearMarinas = () => {
   if (marinas_search.value) {
     marinas_search.value = ''
     getMarinas()
+  }
+}
+const clearLanchasRegion = () => {
+  if (lanchasregion_search.value) {
+    lanchasregion_search.value = ''
+    getLanchasRegion()
+  }
+}
+const clearPolosPesca = () => {
+  if (polospesca_search.value) {
+    polospesca_search.value = ''
+    getPolosPesca()
   }
 }
 
@@ -1142,6 +1409,28 @@ const getMarinas = async () => {
     .get(`/marinas/?search=${marinas_search.value}`)
     .then((response) => {
       marinas.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getLanchasRegion = async () => {
+  api
+    .get(`/lanchasregion/?search=${lanchasregion_search.value}`)
+    .then((response) => {
+      lanchasregion.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getPolosPesca = async () => {
+  api
+    .get(`/destpesca/?search=${polospesca_search.value}`)
+    .then((response) => {
+      polospesca.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {
