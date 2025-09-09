@@ -10,6 +10,7 @@
                   <q-tab name="airports" icon="connecting_airports" label="Aeropuertos" />
                   <q-tab name="ships" icon="sailing" label="Barcos" />
                   <q-tab name="destinations" icon="beach_access" label="Destinos" />
+                  <q-tab name="hospedaje" icon="hotel" label="Hospedaje" />
                 </q-tabs>
               </template>
 
@@ -805,6 +806,362 @@
                       </q-expansion-item>
                     </q-list>
                   </q-tab-panel>
+                  <q-tab-panel name="hospedaje">
+                    <div class="text-h4 q-mb-md">Hospedaje</div>
+                    <q-list bordered class="rounded-borders">
+                      <q-expansion-item
+                        expand-separator
+                        v-model="exHoteles"
+                        icon="assessment"
+                        label="Hoteles"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Hoteles</div>
+                            <q-btn
+                              to="/lugareshoteles"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getLugaresHoteles()"
+                                    filled
+                                    v-model="lugareshoteles_search"
+                                    label="Lugares Hoteles"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getLugaresHoteles()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearLugaresHoteles()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="lugareshoteles"
+                                :columns="lugareshotelescolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteLugarHotel(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editLugarHotel(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+
+                      <q-expansion-item
+                        expand-separator
+                        v-model="exCasasRenta"
+                        icon="assessment"
+                        label="Casas con rentas de habitaciones"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Casas con rentas de habitaciones</div>
+                            <q-btn
+                              to="/marinas"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getMarinas()"
+                                    filled
+                                    v-model="marinas_search"
+                                    label="Marinas"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getMarinas()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearMarinas()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="marinas"
+                                :columns="marinascolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteMarinas(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editMarinas(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+
+                      <q-expansion-item
+                        expand-separator
+                        v-model="exTiposHabitaciones"
+                        icon="assessment"
+                        label="Tipos de habitaciones"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Tipos de habitaciones</div>
+                            <q-btn
+                              to="/marinas"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getMarinas()"
+                                    filled
+                                    v-model="marinas_search"
+                                    label="Marinas"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getMarinas()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearMarinas()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="marinas"
+                                :columns="marinascolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteMarinas(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editMarinas(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+
+                      <q-expansion-item
+                        expand-separator
+                        v-model="exRegimenes"
+                        icon="assessment"
+                        label="Regimenes"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Regimenes</div>
+                            <q-btn
+                              to="/marinas"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getMarinas()"
+                                    filled
+                                    v-model="marinas_search"
+                                    label="Marinas"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getMarinas()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearMarinas()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="marinas"
+                                :columns="marinascolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteMarinas(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editMarinas(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+                    </q-list>
+                  </q-tab-panel>
                 </q-tab-panels>
               </template>
             </q-splitter>
@@ -838,6 +1195,7 @@ const exDestinos = ref(false)
 const exMarinas = ref(false)
 const exLanchasRegion = ref(false)
 const exPolosPesca = ref(false)
+const exHoteles = ref(false)
 
 const splitterModel = ref(20)
 
@@ -1040,6 +1398,45 @@ const polospescacolums = ref([
   },
 ])
 
+const lugareshoteles_search = ref('')
+const lugareshoteles = ref([])
+const lugareshotelescolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'polotext',
+    align: 'left',
+    label: 'Polo',
+    field: 'polotext',
+    sortable: true,
+  },
+  {
+    name: 'LugarHotel',
+    align: 'left',
+    label: 'Lugar Hotel',
+    field: 'LugarHotel',
+    sortable: true,
+  },
+  {
+    name: 'Direccion',
+    align: 'left',
+    label: 'Direccion',
+    field: 'Direccion',
+    sortable: true,
+  },
+  {
+    name: 'Telefono',
+    align: 'left',
+    label: 'Telefono',
+    field: 'Telefono',
+    sortable: true,
+  },
+])
+
 onMounted(() => {
   if (tabName.value) tab.value = tabName.value
   expItem()
@@ -1052,6 +1449,7 @@ onMounted(() => {
   getMarinas()
   getLanchasRegion()
   getPolosPesca()
+  getLugaresHoteles()
 })
 
 const expItem = () => {
@@ -1063,6 +1461,7 @@ const expItem = () => {
   exMarinas.value = exItem.value == 'marinas' ? true : false
   exLanchasRegion.value = exItem.value == 'lanchasregion' ? true : false
   exPolosPesca.value = exItem.value == 'polospesca' ? true : false
+  exHoteles.value = exItem.value == 'hoteles' ? true : false
 }
 
 const editAirport = (row) => {
@@ -1091,6 +1490,9 @@ const editLanchasRegion = (row) => {
 }
 const editPoloPesca = (row) => {
   router.push(`/editpolopesca/${row.slug}`)
+}
+const editLugarHotel = (row) => {
+  router.push(`/editlugarhotel/${row.slug}`)
 }
 
 const deleteAirport = (row) => {
@@ -1282,6 +1684,27 @@ const deletePoloPesca = (row) => {
       })
   })
 }
+const deleteLugarHotel = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.LugarHotel}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    lugareshoteles.value = lugareshoteles.value.filter((Lugar) => Lugar.id !== row.id)
+    api
+      .delete(`/lugareshoteles/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Hotel o Lugar eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
 
 const clearAirports = () => {
   if (airport_search.value) {
@@ -1335,6 +1758,12 @@ const clearPolosPesca = () => {
   if (polospesca_search.value) {
     polospesca_search.value = ''
     getPolosPesca()
+  }
+}
+const clearLugaresHoteles = () => {
+  if (lugareshoteles_search.value) {
+    lugareshoteles_search.value = ''
+    getLugaresHoteles()
   }
 }
 
@@ -1431,6 +1860,17 @@ const getPolosPesca = async () => {
     .get(`/destpesca/?search=${polospesca_search.value}`)
     .then((response) => {
       polospesca.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getLugaresHoteles = async () => {
+  api
+    .get(`/lugareshoteles/?search=${lugareshoteles_search.value}`)
+    .then((response) => {
+      lugareshoteles.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {

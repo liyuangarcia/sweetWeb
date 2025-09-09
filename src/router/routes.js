@@ -173,6 +173,22 @@ const routes = [
           isEditing: true,
         },
       },
+      {
+        path: '/lugareshoteles',
+        component: () => import('src/pages/LugarHotelPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editlugarhotel/:slug',
+        component: () => import('src/pages/LugarHotelPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
     ],
   },
   //
