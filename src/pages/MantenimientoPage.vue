@@ -899,7 +899,7 @@
 
                       <q-expansion-item
                         expand-separator
-                        v-model="exCasasRenta"
+                        v-model="exRentRoom"
                         icon="assessment"
                         label="Casas con rentas de habitaciones"
                       >
@@ -907,7 +907,7 @@
                           <q-card-section>
                             <div class="text-h4 q-mb-md">Casas con rentas de habitaciones</div>
                             <q-btn
-                              to="/marinas"
+                              to="/rentroom"
                               color="red-10"
                               icon="add"
                               label="Agregar"
@@ -917,10 +917,10 @@
                               <div class="row q-col-gutter-md">
                                 <div class="col-12 col-sm-12 col-md-12">
                                   <q-input
-                                    @keyup.enter="getMarinas()"
+                                    @keyup.enter="getRentRoom()"
                                     filled
-                                    v-model="marinas_search"
-                                    label="Marinas"
+                                    v-model="rentroom_search"
+                                    label="Rent Room"
                                     dense
                                   >
                                     <template v-slot:append>
@@ -932,14 +932,14 @@
 
                               <div class="row justify-end q-mt-md">
                                 <q-btn
-                                  @click="getMarinas()"
+                                  @click="getRentRoom()"
                                   color="red-10"
                                   label="Buscar"
                                   icon="search"
                                   class="q-mr-md"
                                 />
                                 <q-btn
-                                  @click="clearMarinas()"
+                                  @click="clearRentRoom()"
                                   color="grey"
                                   label="Limpiar"
                                   outline
@@ -948,8 +948,8 @@
                             </div>
                             <div class="reserva-table">
                               <q-table
-                                :rows="marinas"
-                                :columns="marinascolums"
+                                :rows="rentroom"
+                                :columns="rentroomcolums"
                                 row-key="id"
                                 flat
                                 bordered
@@ -965,7 +965,7 @@
                                         round
                                         dense
                                         title="Eliminar"
-                                        @click="deleteMarinas(props.row)"
+                                        @click="deleteRentRoom(props.row)"
                                       />
                                       <q-btn
                                         icon="edit"
@@ -974,7 +974,7 @@
                                         round
                                         dense
                                         title="Editar"
-                                        @click="editMarinas(props.row)"
+                                        @click="editRentRoom(props.row)"
                                       />
                                     </div>
                                   </q-td>
@@ -995,7 +995,7 @@
                           <q-card-section>
                             <div class="text-h4 q-mb-md">Tipos de habitaciones</div>
                             <q-btn
-                              to="/marinas"
+                              to="/tiposhabitaciones"
                               color="red-10"
                               icon="add"
                               label="Agregar"
@@ -1005,10 +1005,10 @@
                               <div class="row q-col-gutter-md">
                                 <div class="col-12 col-sm-12 col-md-12">
                                   <q-input
-                                    @keyup.enter="getMarinas()"
+                                    @keyup.enter="getTiposHabitaciones()"
                                     filled
-                                    v-model="marinas_search"
-                                    label="Marinas"
+                                    v-model="tiposhabitaciones_search"
+                                    label="Tipos habitaciones"
                                     dense
                                   >
                                     <template v-slot:append>
@@ -1020,14 +1020,14 @@
 
                               <div class="row justify-end q-mt-md">
                                 <q-btn
-                                  @click="getMarinas()"
+                                  @click="getTiposHabitaciones()"
                                   color="red-10"
                                   label="Buscar"
                                   icon="search"
                                   class="q-mr-md"
                                 />
                                 <q-btn
-                                  @click="clearMarinas()"
+                                  @click="clearTiposHabitaciones()"
                                   color="grey"
                                   label="Limpiar"
                                   outline
@@ -1036,8 +1036,8 @@
                             </div>
                             <div class="reserva-table">
                               <q-table
-                                :rows="marinas"
-                                :columns="marinascolums"
+                                :rows="tiposhabitaciones"
+                                :columns="tiposhabitacionescolums"
                                 row-key="id"
                                 flat
                                 bordered
@@ -1053,7 +1053,7 @@
                                         round
                                         dense
                                         title="Eliminar"
-                                        @click="deleteMarinas(props.row)"
+                                        @click="deleteTipoHabitacion(props.row)"
                                       />
                                       <q-btn
                                         icon="edit"
@@ -1062,7 +1062,7 @@
                                         round
                                         dense
                                         title="Editar"
-                                        @click="editMarinas(props.row)"
+                                        @click="editTipoHabitacion(props.row)"
                                       />
                                     </div>
                                   </q-td>
@@ -1083,7 +1083,7 @@
                           <q-card-section>
                             <div class="text-h4 q-mb-md">Regimenes</div>
                             <q-btn
-                              to="/marinas"
+                              to="/regimenes"
                               color="red-10"
                               icon="add"
                               label="Agregar"
@@ -1093,10 +1093,10 @@
                               <div class="row q-col-gutter-md">
                                 <div class="col-12 col-sm-12 col-md-12">
                                   <q-input
-                                    @keyup.enter="getMarinas()"
+                                    @keyup.enter="getRegimenes()"
                                     filled
-                                    v-model="marinas_search"
-                                    label="Marinas"
+                                    v-model="regimenes_search"
+                                    label="Regimenes"
                                     dense
                                   >
                                     <template v-slot:append>
@@ -1108,14 +1108,14 @@
 
                               <div class="row justify-end q-mt-md">
                                 <q-btn
-                                  @click="getMarinas()"
+                                  @click="getRegimenes()"
                                   color="red-10"
                                   label="Buscar"
                                   icon="search"
                                   class="q-mr-md"
                                 />
                                 <q-btn
-                                  @click="clearMarinas()"
+                                  @click="clearRegimenes()"
                                   color="grey"
                                   label="Limpiar"
                                   outline
@@ -1124,8 +1124,8 @@
                             </div>
                             <div class="reserva-table">
                               <q-table
-                                :rows="marinas"
-                                :columns="marinascolums"
+                                :rows="regimenes"
+                                :columns="regimenescolums"
                                 row-key="id"
                                 flat
                                 bordered
@@ -1141,7 +1141,7 @@
                                         round
                                         dense
                                         title="Eliminar"
-                                        @click="deleteMarinas(props.row)"
+                                        @click="deleteRegimenes(props.row)"
                                       />
                                       <q-btn
                                         icon="edit"
@@ -1150,7 +1150,7 @@
                                         round
                                         dense
                                         title="Editar"
-                                        @click="editMarinas(props.row)"
+                                        @click="editRegimenes(props.row)"
                                       />
                                     </div>
                                   </q-td>
@@ -1196,6 +1196,9 @@ const exMarinas = ref(false)
 const exLanchasRegion = ref(false)
 const exPolosPesca = ref(false)
 const exHoteles = ref(false)
+const exTiposHabitaciones = ref(false)
+const exRegimenes = ref(false)
+const exRentRoom = ref(false)
 
 const splitterModel = ref(20)
 
@@ -1437,6 +1440,102 @@ const lugareshotelescolums = ref([
   },
 ])
 
+const tiposhabitaciones_search = ref('')
+const tiposhabitaciones = ref([])
+const tiposhabitacionescolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'THABITACION',
+    align: 'left',
+    label: 'Tipo Habitacion',
+    field: 'THABITACION',
+    sortable: true,
+  },
+  {
+    name: 'TCANTC',
+    align: 'left',
+    label: 'Cantidad cuartos',
+    field: 'TCANTC',
+    sortable: true,
+  },
+])
+
+const regimenes_search = ref('')
+const regimenes = ref([])
+const regimenescolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'TPLANALIM',
+    align: 'left',
+    label: 'TPLANALIM',
+    field: 'TPLANALIM',
+    sortable: true,
+  },
+])
+
+const rentroom_search = ref('')
+const rentroom = ref([])
+const rentroomcolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'polotext',
+    align: 'left',
+    label: 'Polo',
+    field: 'polotext',
+    sortable: true,
+  },
+  {
+    name: 'municipiotext',
+    align: 'left',
+    label: 'Municipio',
+    field: 'municipiotext',
+    sortable: true,
+  },
+  {
+    name: 'Direccioncasa',
+    align: 'left',
+    label: 'Direccion',
+    field: 'Direccioncasa',
+    sortable: true,
+  },
+  {
+    name: 'telefonocasa',
+    align: 'left',
+    label: 'Telefono',
+    field: 'telefonocasa',
+    sortable: true,
+  },
+  {
+    name: 'contactocasa',
+    align: 'left',
+    label: 'Contacto',
+    field: 'contactocasa',
+    sortable: true,
+  },
+  {
+    name: 'descripcion',
+    align: 'left',
+    label: 'Descripcion',
+    field: 'descripcion',
+    sortable: true,
+  },
+])
+
 onMounted(() => {
   if (tabName.value) tab.value = tabName.value
   expItem()
@@ -1450,6 +1549,9 @@ onMounted(() => {
   getLanchasRegion()
   getPolosPesca()
   getLugaresHoteles()
+  getTiposHabitaciones()
+  getRegimenes()
+  getRentRoom()
 })
 
 const expItem = () => {
@@ -1462,6 +1564,9 @@ const expItem = () => {
   exLanchasRegion.value = exItem.value == 'lanchasregion' ? true : false
   exPolosPesca.value = exItem.value == 'polospesca' ? true : false
   exHoteles.value = exItem.value == 'hoteles' ? true : false
+  exTiposHabitaciones.value = exItem.value == 'tiposhabitaciones' ? true : false
+  exRegimenes.value = exItem.value == 'regimenes' ? true : false
+  exRentRoom.value = exItem.value == 'rentroom' ? true : false
 }
 
 const editAirport = (row) => {
@@ -1493,6 +1598,15 @@ const editPoloPesca = (row) => {
 }
 const editLugarHotel = (row) => {
   router.push(`/editlugarhotel/${row.slug}`)
+}
+const editTipoHabitacion = (row) => {
+  router.push(`/edittipohabitacion/${row.slug}`)
+}
+const editRegimenes = (row) => {
+  router.push(`/editregimen/${row.slug}`)
+}
+const editRentRoom = (row) => {
+  router.push(`/editrentroom/${row.slug}`)
 }
 
 const deleteAirport = (row) => {
@@ -1705,6 +1819,69 @@ const deleteLugarHotel = (row) => {
       })
   })
 }
+const deleteTipoHabitacion = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.THABITACION}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    tiposhabitaciones.value = tiposhabitaciones.value.filter((tipo) => tipo.id !== row.id)
+    api
+      .delete(`/tiposhabitaciones/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Tipos de habitaciones eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
+const deleteRegimenes = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.TPLANALIM}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    regimenes.value = regimenes.value.filter((regimen) => regimen.id !== row.id)
+    api
+      .delete(`/regimenes/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Regimenes eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
+const deleteRentRoom = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.Direccioncasa}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    rentroom.value = rentroom.value.filter((renta) => renta.id !== row.id)
+    api
+      .delete(`/rentroom/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Renta eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
 
 const clearAirports = () => {
   if (airport_search.value) {
@@ -1764,6 +1941,24 @@ const clearLugaresHoteles = () => {
   if (lugareshoteles_search.value) {
     lugareshoteles_search.value = ''
     getLugaresHoteles()
+  }
+}
+const clearTiposHabitaciones = () => {
+  if (tiposhabitaciones_search.value) {
+    tiposhabitaciones_search.value = ''
+    getTiposHabitaciones()
+  }
+}
+const clearRegimenes = () => {
+  if (regimenes_search.value) {
+    regimenes_search.value = ''
+    getRegimenes()
+  }
+}
+const clearRentRoom = () => {
+  if (rentroom_search.value) {
+    rentroom_search.value = ''
+    getRentRoom()
   }
 }
 
@@ -1871,6 +2066,39 @@ const getLugaresHoteles = async () => {
     .get(`/lugareshoteles/?search=${lugareshoteles_search.value}`)
     .then((response) => {
       lugareshoteles.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getTiposHabitaciones = async () => {
+  api
+    .get(`/tiposhabitaciones/?search=${tiposhabitaciones_search.value}`)
+    .then((response) => {
+      tiposhabitaciones.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getRegimenes = async () => {
+  api
+    .get(`/regimenes/?search=${regimenes_search.value}`)
+    .then((response) => {
+      regimenes.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getRentRoom = async () => {
+  api
+    .get(`/rentroom/?search=${rentroom_search.value}`)
+    .then((response) => {
+      rentroom.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {

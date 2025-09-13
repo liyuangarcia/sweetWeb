@@ -189,6 +189,54 @@ const routes = [
           isEditing: true,
         },
       },
+      {
+        path: '/tiposhabitaciones',
+        component: () => import('src/pages/TipoHabitacionPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/edittipohabitacion/:slug',
+        component: () => import('src/pages/TipoHabitacionPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/regimenes',
+        component: () => import('src/pages/RegimenPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editregimen/:slug',
+        component: () => import('src/pages/RegimenPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/rentroom',
+        component: () => import('src/pages/RentRoomPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editrentroom/:slug',
+        component: () => import('src/pages/RentRoomPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
     ],
   },
   //
