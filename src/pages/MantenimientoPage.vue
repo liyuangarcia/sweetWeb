@@ -11,6 +11,8 @@
                   <q-tab name="ships" icon="sailing" label="Barcos" />
                   <q-tab name="destinations" icon="beach_access" label="Destinos" />
                   <q-tab name="hospedaje" icon="hotel" label="Hospedaje" />
+                  <q-tab name="nacionalidades" icon="hotel" label="Nacionalidades" />
+                  <q-tab name="origenes" icon="hotel" label="Origenes" />
                 </q-tabs>
               </template>
 
@@ -275,7 +277,7 @@
 
                       <q-expansion-item
                         expand-separator
-                        icon="drafts"
+                        icon="scuba_diving"
                         v-model="exTipoPesca"
                         label="Posibles Actividades en el polo"
                       >
@@ -362,7 +364,7 @@
                       </q-expansion-item>
 
                       <q-expansion-item
-                        icon="assessment"
+                        icon="place"
                         label="Lanchas por Region"
                         v-model="exLanchasRegion"
                       >
@@ -455,7 +457,7 @@
                     <q-list bordered class="rounded-borders">
                       <q-expansion-item
                         expand-separator
-                        icon="perm_identity"
+                        icon="phishing"
                         label="Regiones de Pesca"
                         v-model="exRegionesPesca"
                       >
@@ -631,7 +633,7 @@
 
                       <q-expansion-item
                         expand-separator
-                        icon="drafts"
+                        icon="transfer_within_a_station"
                         v-model="exPolosPesca"
                         label="Polos de pesca para los transfers"
                       >
@@ -720,7 +722,7 @@
                       <q-expansion-item
                         expand-separator
                         v-model="exMarinas"
-                        icon="assessment"
+                        icon="anchor"
                         label="Marinas"
                       >
                         <q-card>
@@ -812,7 +814,7 @@
                       <q-expansion-item
                         expand-separator
                         v-model="exHoteles"
-                        icon="assessment"
+                        icon="hotel"
                         label="Hoteles"
                       >
                         <q-card>
@@ -900,7 +902,7 @@
                       <q-expansion-item
                         expand-separator
                         v-model="exRentRoom"
-                        icon="assessment"
+                        icon="villa"
                         label="Casas con rentas de habitaciones"
                       >
                         <q-card>
@@ -988,7 +990,7 @@
                       <q-expansion-item
                         expand-separator
                         v-model="exTiposHabitaciones"
-                        icon="assessment"
+                        icon="room_preferences"
                         label="Tipos de habitaciones"
                       >
                         <q-card>
@@ -1076,7 +1078,7 @@
                       <q-expansion-item
                         expand-separator
                         v-model="exRegimenes"
-                        icon="assessment"
+                        icon="room_service"
                         label="Regimenes"
                       >
                         <q-card>
@@ -1162,6 +1164,162 @@
                       </q-expansion-item>
                     </q-list>
                   </q-tab-panel>
+                  <q-tab-panel name="nacionalidades">
+                    <div class="text-h4 q-mb-md">Nacionalidades</div>
+                    <q-btn
+                      to="/nacionalidades"
+                      color="red-10"
+                      icon="add"
+                      label="Agregar"
+                      class="btn-agregar"
+                    />
+                    <div class="filter-section">
+                      <div class="row q-col-gutter-md">
+                        <div class="col-12 col-sm-12 col-md-12">
+                          <q-input
+                            @keyup.enter="getNacionalidades()"
+                            filled
+                            v-model="nacionalidades_search"
+                            label="Nacionalidades"
+                            dense
+                          >
+                            <template v-slot:append>
+                              <q-icon name="search" />
+                            </template>
+                          </q-input>
+                        </div>
+                      </div>
+
+                      <div class="row justify-end q-mt-md">
+                        <q-btn
+                          @click="getNacionalidades()"
+                          color="red-10"
+                          label="Buscar"
+                          icon="search"
+                          class="q-mr-md"
+                        />
+                        <q-btn
+                          @click="clearNacionalidades()"
+                          color="grey"
+                          label="Limpiar"
+                          outline
+                        />
+                      </div>
+                    </div>
+                    <div class="reserva-table">
+                      <q-table
+                        :rows="nacionalidades"
+                        :columns="nacionalidadescolums"
+                        row-key="id"
+                        flat
+                        bordered
+                        :pagination="{ rowsPerPage: 10 }"
+                      >
+                        <template v-slot:body-cell-actions="props">
+                          <q-td :props="props" class="text-center">
+                            <div class="q-gutter-xs">
+                              <q-btn
+                                icon="delete"
+                                color="red-10"
+                                size="sm"
+                                round
+                                dense
+                                title="Eliminar"
+                                @click="deleteNacionalidad(props.row)"
+                              />
+                              <q-btn
+                                icon="edit"
+                                color="grey"
+                                size="sm"
+                                round
+                                dense
+                                title="Editar"
+                                @click="editNacionalidad(props.row)"
+                              />
+                            </div>
+                          </q-td>
+                        </template>
+                      </q-table>
+                    </div>
+                  </q-tab-panel>
+                  <q-tab-panel name="origenes">
+                    <div class="text-h4 q-mb-md">Origenes de la reserva</div>
+                    <q-btn
+                      to="/origenreservas"
+                      color="red-10"
+                      icon="add"
+                      label="Agregar"
+                      class="btn-agregar"
+                    />
+                    <div class="filter-section">
+                      <div class="row q-col-gutter-md">
+                        <div class="col-12 col-sm-12 col-md-12">
+                          <q-input
+                            @keyup.enter="getOrigenReservas()"
+                            filled
+                            v-model="origenreservas_search"
+                            label="Origenes"
+                            dense
+                          >
+                            <template v-slot:append>
+                              <q-icon name="search" />
+                            </template>
+                          </q-input>
+                        </div>
+                      </div>
+
+                      <div class="row justify-end q-mt-md">
+                        <q-btn
+                          @click="getOrigenReservas()"
+                          color="red-10"
+                          label="Buscar"
+                          icon="search"
+                          class="q-mr-md"
+                        />
+                        <q-btn
+                          @click="clearOrigenReservas()"
+                          color="grey"
+                          label="Limpiar"
+                          outline
+                        />
+                      </div>
+                    </div>
+                    <div class="reserva-table">
+                      <q-table
+                        :rows="origenreservas"
+                        :columns="origenreservascolums"
+                        row-key="id"
+                        flat
+                        bordered
+                        :pagination="{ rowsPerPage: 10 }"
+                      >
+                        <template v-slot:body-cell-actions="props">
+                          <q-td :props="props" class="text-center">
+                            <div class="q-gutter-xs">
+                              <q-btn
+                                icon="delete"
+                                color="red-10"
+                                size="sm"
+                                round
+                                dense
+                                title="Eliminar"
+                                @click="deleteOrigenReserva(props.row)"
+                              />
+                              <q-btn
+                                icon="edit"
+                                color="grey"
+                                size="sm"
+                                round
+                                dense
+                                title="Editar"
+                                @click="editOrigenReserva(props.row)"
+                              />
+                            </div>
+                          </q-td>
+                        </template>
+                      </q-table>
+                    </div>
+                  </q-tab-panel>
                 </q-tab-panels>
               </template>
             </q-splitter>
@@ -1199,6 +1357,8 @@ const exHoteles = ref(false)
 const exTiposHabitaciones = ref(false)
 const exRegimenes = ref(false)
 const exRentRoom = ref(false)
+const exNacionalidades = ref(false)
+const exOrigenes = ref(false)
 
 const splitterModel = ref(20)
 
@@ -1536,6 +1696,112 @@ const rentroomcolums = ref([
   },
 ])
 
+const nacionalidades_search = ref('')
+const nacionalidades = ref([])
+const nacionalidadescolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'descripcion',
+    align: 'left',
+    label: 'Nacionalidad',
+    field: 'descripcion',
+    sortable: true,
+  },
+])
+
+const origenreservas_search = ref('')
+const origenreservas = ref([])
+const origenreservascolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'ONOMBRE',
+    align: 'left',
+    label: 'Nombre',
+    field: 'ONOMBRE',
+    sortable: true,
+  },
+  {
+    name: 'OCORREO',
+    align: 'left',
+    label: 'Correo electronico',
+    field: 'OCORREO',
+    sortable: true,
+  },
+  {
+    name: 'Onreservai',
+    align: 'left',
+    label: 'Onreservai',
+    field: 'Onreservai',
+    sortable: true,
+  },
+  {
+    name: 'onreservaf',
+    align: 'left',
+    label: 'onreservaf',
+    field: 'onreservaf',
+    sortable: true,
+  },
+  {
+    name: 'ONINICIOCOD',
+    align: 'left',
+    label: 'ONINICIOCOD',
+    field: 'ONINICIOCOD',
+    sortable: true,
+  },
+  {
+    name: 'temporada',
+    align: 'left',
+    label: 'temporada',
+    field: 'temporada',
+    sortable: true,
+  },
+  {
+    name: 'codini',
+    align: 'left',
+    label: 'codini',
+    field: 'codini',
+    sortable: true,
+  },
+  {
+    name: 'codfin',
+    align: 'left',
+    label: 'codfin',
+    field: 'codfin',
+    sortable: true,
+  },
+  {
+    name: 'sweetin',
+    align: 'left',
+    label: 'sweetin',
+    field: 'sweetin',
+    sortable: true,
+  },
+  {
+    name: 'automaticfilemaker',
+    align: 'left',
+    label: 'automaticfilemaker',
+    field: 'automaticfilemaker',
+    sortable: true,
+  },
+  {
+    name: 'automaticexcel',
+    align: 'left',
+    label: 'automaticexcel',
+    field: 'automaticexcel',
+    sortable: true,
+  },
+])
+
 onMounted(() => {
   if (tabName.value) tab.value = tabName.value
   expItem()
@@ -1552,6 +1818,8 @@ onMounted(() => {
   getTiposHabitaciones()
   getRegimenes()
   getRentRoom()
+  getNacionalidades()
+  getOrigenReservas()
 })
 
 const expItem = () => {
@@ -1567,6 +1835,8 @@ const expItem = () => {
   exTiposHabitaciones.value = exItem.value == 'tiposhabitaciones' ? true : false
   exRegimenes.value = exItem.value == 'regimenes' ? true : false
   exRentRoom.value = exItem.value == 'rentroom' ? true : false
+  exNacionalidades.value = exItem.value == 'nacionalidades' ? true : false
+  exOrigenes.value = exItem.value == 'origenesreservas' ? true : false
 }
 
 const editAirport = (row) => {
@@ -1607,6 +1877,12 @@ const editRegimenes = (row) => {
 }
 const editRentRoom = (row) => {
   router.push(`/editrentroom/${row.slug}`)
+}
+const editNacionalidad = (row) => {
+  router.push(`/editnacionalidad/${row.slug}`)
+}
+const editOrigenReserva = (row) => {
+  router.push(`/editorigenreserva/${row.slug}`)
 }
 
 const deleteAirport = (row) => {
@@ -1882,6 +2158,48 @@ const deleteRentRoom = (row) => {
       })
   })
 }
+const deleteNacionalidad = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.descripcion}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    nacionalidades.value = nacionalidades.value.filter((nac) => nac.id !== row.id)
+    api
+      .delete(`/nacionalidades/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Nacionalidad eliminada correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
+const deleteOrigenReserva = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.ONOMBRE}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    origenreservas.value = origenreservas.value.filter((origen) => origen.id !== row.id)
+    api
+      .delete(`/origenreservas/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Origen de reserva eliminada correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
 
 const clearAirports = () => {
   if (airport_search.value) {
@@ -1959,6 +2277,18 @@ const clearRentRoom = () => {
   if (rentroom_search.value) {
     rentroom_search.value = ''
     getRentRoom()
+  }
+}
+const clearNacionalidades = () => {
+  if (nacionalidades_search.value) {
+    nacionalidades_search.value = ''
+    getNacionalidades()
+  }
+}
+const clearOrigenReservas = () => {
+  if (origenreservas_search.value) {
+    origenreservas_search.value = ''
+    getOrigenReservas()
   }
 }
 
@@ -2099,6 +2429,28 @@ const getRentRoom = async () => {
     .get(`/rentroom/?search=${rentroom_search.value}`)
     .then((response) => {
       rentroom.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getNacionalidades = async () => {
+  api
+    .get(`/nacionalidades/?search=${nacionalidades_search.value}`)
+    .then((response) => {
+      nacionalidades.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getOrigenReservas = async () => {
+  api
+    .get(`/origenreservas/?search=${origenreservas_search.value}`)
+    .then((response) => {
+      origenreservas.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {

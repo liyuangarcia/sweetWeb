@@ -237,6 +237,38 @@ const routes = [
           isEditing: true,
         },
       },
+      {
+        path: '/nacionalidades',
+        component: () => import('src/pages/NacionalidadPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editnacionalidad/:slug',
+        component: () => import('src/pages/NacionalidadPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/origenreservas',
+        component: () => import('src/pages/origenReservaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editorigenreserva/:slug',
+        component: () => import('src/pages/OrigenReservaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
     ],
   },
   //
