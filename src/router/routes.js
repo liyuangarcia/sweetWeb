@@ -255,7 +255,7 @@ const routes = [
       },
       {
         path: '/origenreservas',
-        component: () => import('src/pages/origenReservaPage.vue'),
+        component: () => import('src/pages/OrigenReservaPage.vue'),
         meta: { requiresAuth: true },
         props: {
           isEditing: false,
@@ -264,6 +264,22 @@ const routes = [
       {
         path: '/editorigenreserva/:slug',
         component: () => import('src/pages/OrigenReservaPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
+      {
+        path: '/tiposcarros',
+        component: () => import('src/pages/TipoCarroPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/edittipocarro/:slug',
+        component: () => import('src/pages/TipoCarroPage.vue'),
         meta: { requiresAuth: true },
         props: {
           isEditing: true,

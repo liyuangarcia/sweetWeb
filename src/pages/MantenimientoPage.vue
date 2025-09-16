@@ -13,6 +13,7 @@
                   <q-tab name="hospedaje" icon="hotel" label="Hospedaje" />
                   <q-tab name="nacionalidades" icon="hotel" label="Nacionalidades" />
                   <q-tab name="origenes" icon="hotel" label="Origenes" />
+                  <q-tab name="rentcar" icon="car_rental" label="Rent Car y Transfers" />
                 </q-tabs>
               </template>
 
@@ -808,6 +809,7 @@
                       </q-expansion-item>
                     </q-list>
                   </q-tab-panel>
+
                   <q-tab-panel name="hospedaje">
                     <div class="text-h4 q-mb-md">Hospedaje</div>
                     <q-list bordered class="rounded-borders">
@@ -1164,6 +1166,7 @@
                       </q-expansion-item>
                     </q-list>
                   </q-tab-panel>
+
                   <q-tab-panel name="nacionalidades">
                     <div class="text-h4 q-mb-md">Nacionalidades</div>
                     <q-btn
@@ -1242,6 +1245,7 @@
                       </q-table>
                     </div>
                   </q-tab-panel>
+
                   <q-tab-panel name="origenes">
                     <div class="text-h4 q-mb-md">Origenes de la reserva</div>
                     <q-btn
@@ -1320,6 +1324,99 @@
                       </q-table>
                     </div>
                   </q-tab-panel>
+
+                  <q-tab-panel name="rentcar">
+                    <div class="text-h4 q-mb-md">Rent Car y Transfers</div>
+                    <q-list bordered class="rounded-borders">
+                      <q-expansion-item
+                        expand-separator
+                        v-model="exTiposCarros"
+                        icon="car_rental"
+                        label="Medios de Transfer"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="text-h4 q-mb-md">Medios de Transfer</div>
+                            <q-btn
+                              to="/tiposcarros"
+                              color="red-10"
+                              icon="add"
+                              label="Agregar"
+                              class="btn-agregar"
+                            />
+                            <div class="filter-section">
+                              <div class="row q-col-gutter-md">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                  <q-input
+                                    @keyup.enter="getTiposCarros()"
+                                    filled
+                                    v-model="tiposcarros_search"
+                                    label="Tipos"
+                                    dense
+                                  >
+                                    <template v-slot:append>
+                                      <q-icon name="search" />
+                                    </template>
+                                  </q-input>
+                                </div>
+                              </div>
+
+                              <div class="row justify-end q-mt-md">
+                                <q-btn
+                                  @click="getTiposCarros()"
+                                  color="red-10"
+                                  label="Buscar"
+                                  icon="search"
+                                  class="q-mr-md"
+                                />
+                                <q-btn
+                                  @click="clearTiposCarros()"
+                                  color="grey"
+                                  label="Limpiar"
+                                  outline
+                                />
+                              </div>
+                            </div>
+                            <div class="reserva-table">
+                              <q-table
+                                :rows="tiposcarros"
+                                :columns="tiposcarroscolums"
+                                row-key="id"
+                                flat
+                                bordered
+                                :pagination="{ rowsPerPage: 10 }"
+                              >
+                                <template v-slot:body-cell-actions="props">
+                                  <q-td :props="props" class="text-center">
+                                    <div class="q-gutter-xs">
+                                      <q-btn
+                                        icon="delete"
+                                        color="red-10"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Eliminar"
+                                        @click="deleteTipoCarro(props.row)"
+                                      />
+                                      <q-btn
+                                        icon="edit"
+                                        color="grey"
+                                        size="sm"
+                                        round
+                                        dense
+                                        title="Editar"
+                                        @click="editTipoCarro(props.row)"
+                                      />
+                                    </div>
+                                  </q-td>
+                                </template>
+                              </q-table>
+                            </div>
+                          </q-card-section>
+                        </q-card>
+                      </q-expansion-item>
+                    </q-list>
+                  </q-tab-panel>
                 </q-tab-panels>
               </template>
             </q-splitter>
@@ -1359,6 +1456,7 @@ const exRegimenes = ref(false)
 const exRentRoom = ref(false)
 const exNacionalidades = ref(false)
 const exOrigenes = ref(false)
+const exTiposCarros = ref(false)
 
 const splitterModel = ref(20)
 
@@ -1802,6 +1900,23 @@ const origenreservascolums = ref([
   },
 ])
 
+const tiposcarros_search = ref('')
+const tiposcarros = ref([])
+const tiposcarroscolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'desctipocarro',
+    align: 'left',
+    label: 'Tipo carro',
+    field: 'desctipocarro',
+    sortable: true,
+  },
+])
 onMounted(() => {
   if (tabName.value) tab.value = tabName.value
   expItem()
@@ -1820,6 +1935,7 @@ onMounted(() => {
   getRentRoom()
   getNacionalidades()
   getOrigenReservas()
+  getTiposCarros()
 })
 
 const expItem = () => {
@@ -1837,6 +1953,7 @@ const expItem = () => {
   exRentRoom.value = exItem.value == 'rentroom' ? true : false
   exNacionalidades.value = exItem.value == 'nacionalidades' ? true : false
   exOrigenes.value = exItem.value == 'origenesreservas' ? true : false
+  exTiposCarros.value = exItem.value == 'tiposcarros' ? true : false
 }
 
 const editAirport = (row) => {
@@ -1883,6 +2000,9 @@ const editNacionalidad = (row) => {
 }
 const editOrigenReserva = (row) => {
   router.push(`/editorigenreserva/${row.slug}`)
+}
+const editTipoCarro = (row) => {
+  router.push(`/edittipocarro/${row.slug}`)
 }
 
 const deleteAirport = (row) => {
@@ -2200,6 +2320,27 @@ const deleteOrigenReserva = (row) => {
       })
   })
 }
+const deleteTipoCarro = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.desctipocarro}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    tiposcarros.value = tiposcarros.value.filter((tipo) => tipo.id !== row.id)
+    api
+      .delete(`/tiposcarros/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Tipo de carro eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
 
 const clearAirports = () => {
   if (airport_search.value) {
@@ -2289,6 +2430,12 @@ const clearOrigenReservas = () => {
   if (origenreservas_search.value) {
     origenreservas_search.value = ''
     getOrigenReservas()
+  }
+}
+const clearTiposCarros = () => {
+  if (tiposcarros_search.value) {
+    tiposcarros_search.value = ''
+    getTiposCarros()
   }
 }
 
@@ -2451,6 +2598,17 @@ const getOrigenReservas = async () => {
     .get(`/origenreservas/?search=${origenreservas_search.value}`)
     .then((response) => {
       origenreservas.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getTiposCarros = async () => {
+  api
+    .get(`/tiposcarros/?search=${tiposcarros_search.value}`)
+    .then((response) => {
+      tiposcarros.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {
