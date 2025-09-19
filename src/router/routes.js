@@ -285,6 +285,22 @@ const routes = [
           isEditing: true,
         },
       },
+      {
+        path: '/vuelosdomesticos',
+        component: () => import('src/pages/VueloDomesticoPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
+      },
+      {
+        path: '/editvuelodomestico/:slug',
+        component: () => import('src/pages/VueloDomesticoPage.vue'),
+        meta: { requiresAuth: true },
+        props: {
+          isEditing: true,
+        },
+      },
     ],
   },
   //

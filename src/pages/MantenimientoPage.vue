@@ -14,6 +14,7 @@
                   <q-tab name="nacionalidades" icon="hotel" label="Nacionalidades" />
                   <q-tab name="origenes" icon="hotel" label="Origenes" />
                   <q-tab name="rentcar" icon="car_rental" label="Rent Car y Transfers" />
+                  <q-tab name="vuelos" icon="local_airport" label="Vuelos" />
                 </q-tabs>
               </template>
 
@@ -1417,6 +1418,85 @@
                       </q-expansion-item>
                     </q-list>
                   </q-tab-panel>
+
+                  <q-tab-panel name="vuelos">
+                    <div class="text-h4 q-mb-md">Vuelos Domesticos</div>
+                    <q-btn
+                      to="/vuelosdomesticos"
+                      color="red-10"
+                      icon="add"
+                      label="Agregar"
+                      class="btn-agregar"
+                    />
+                    <div class="filter-section">
+                      <div class="row q-col-gutter-md">
+                        <div class="col-12 col-sm-12 col-md-12">
+                          <q-input
+                            @keyup.enter="getVuelosDomesticos()"
+                            filled
+                            v-model="vuelosdomesticos_search"
+                            label="Vuelos domesticos"
+                            dense
+                          >
+                            <template v-slot:append>
+                              <q-icon name="search" />
+                            </template>
+                          </q-input>
+                        </div>
+                      </div>
+
+                      <div class="row justify-end q-mt-md">
+                        <q-btn
+                          @click="getVuelosDomesticos()"
+                          color="red-10"
+                          label="Buscar"
+                          icon="search"
+                          class="q-mr-md"
+                        />
+                        <q-btn
+                          @click="clearVuelosDomesticos()"
+                          color="grey"
+                          label="Limpiar"
+                          outline
+                        />
+                      </div>
+                    </div>
+                    <div class="reserva-table">
+                      <q-table
+                        :rows="vuelosdomesticos"
+                        :columns="vuelosdomesticoscolums"
+                        row-key="id"
+                        flat
+                        bordered
+                        :pagination="{ rowsPerPage: 10 }"
+                      >
+                        <template v-slot:body-cell-actions="props">
+                          <q-td :props="props" class="text-center">
+                            <div class="q-gutter-xs">
+                              <q-btn
+                                icon="delete"
+                                color="red-10"
+                                size="sm"
+                                round
+                                dense
+                                title="Eliminar"
+                                @click="deleteVueloDomestico(props.row)"
+                              />
+                              <q-btn
+                                icon="edit"
+                                color="grey"
+                                size="sm"
+                                round
+                                dense
+                                title="Editar"
+                                @click="editVueloDomestico(props.row)"
+                              />
+                            </div>
+                          </q-td>
+                        </template>
+                      </q-table>
+                    </div>
+                  </q-tab-panel>
                 </q-tab-panels>
               </template>
             </q-splitter>
@@ -1457,6 +1537,7 @@ const exRentRoom = ref(false)
 const exNacionalidades = ref(false)
 const exOrigenes = ref(false)
 const exTiposCarros = ref(false)
+const exVuelos = ref(false)
 
 const splitterModel = ref(20)
 
@@ -1917,6 +1998,94 @@ const tiposcarroscolums = ref([
     sortable: true,
   },
 ])
+
+const vuelosdomesticos_search = ref('')
+const vuelosdomesticos = ref([])
+const vuelosdomesticoscolums = ref([
+  {
+    name: 'actions',
+    label: 'Acciones',
+    field: 'actions',
+    align: 'center',
+  },
+  {
+    name: 'vdnvuelo',
+    align: 'left',
+    label: 'Vuelo',
+    field: 'vdnvuelo',
+    sortable: true,
+  },
+  {
+    name: 'vddiasemanatext',
+    align: 'left',
+    label: 'Dia',
+    field: 'vddiasemanatext',
+    sortable: true,
+  },
+  {
+    name: 'vdfvueloi',
+    align: 'left',
+    label: 'Fecha',
+    field: 'vdfvueloi',
+    sortable: true,
+  },
+  {
+    name: 'vdcapacasignadai',
+    align: 'left',
+    label: 'Capa.',
+    field: 'vdcapacasignadai',
+    sortable: true,
+  },
+  {
+    name: 'vdpnrasignadoi',
+    align: 'left',
+    label: 'PNR',
+    field: 'vdpnrasignadoi',
+    sortable: true,
+  },
+  {
+    name: 'vdlugardesalidatext',
+    align: 'left',
+    label: 'Polo Origen',
+    field: 'vdlugardesalidatext',
+    sortable: true,
+  },
+  {
+    name: 'vdterminaltext',
+    align: 'left',
+    label: 'Aeropuerto Origen',
+    field: 'vdterminaltext',
+    sortable: true,
+  },
+  {
+    name: 'vdhsalida',
+    align: 'left',
+    label: 'Hora Origen',
+    field: 'vdhsalida',
+    sortable: true,
+  },
+  {
+    name: 'vdpolotext',
+    align: 'left',
+    label: 'Polo Destino',
+    field: 'vdpolotext',
+    sortable: true,
+  },
+  {
+    name: 'vddestinotext',
+    align: 'left',
+    label: 'Aeropuerto Destino',
+    field: 'vddestinotext',
+    sortable: true,
+  },
+  {
+    name: 'vdhllegada',
+    align: 'left',
+    label: 'Hora Llegada',
+    field: 'vdhllegada',
+    sortable: true,
+  },
+])
 onMounted(() => {
   if (tabName.value) tab.value = tabName.value
   expItem()
@@ -1936,6 +2105,7 @@ onMounted(() => {
   getNacionalidades()
   getOrigenReservas()
   getTiposCarros()
+  getVuelosDomesticos()
 })
 
 const expItem = () => {
@@ -1954,6 +2124,7 @@ const expItem = () => {
   exNacionalidades.value = exItem.value == 'nacionalidades' ? true : false
   exOrigenes.value = exItem.value == 'origenesreservas' ? true : false
   exTiposCarros.value = exItem.value == 'tiposcarros' ? true : false
+  exVuelos.value = exItem.value == 'vuelosdomesticos' ? true : false
 }
 
 const editAirport = (row) => {
@@ -2003,6 +2174,9 @@ const editOrigenReserva = (row) => {
 }
 const editTipoCarro = (row) => {
   router.push(`/edittipocarro/${row.slug}`)
+}
+const editVueloDomestico = (row) => {
+  router.push(`/editvuelodomestico/${row.slug}`)
 }
 
 const deleteAirport = (row) => {
@@ -2341,6 +2515,27 @@ const deleteTipoCarro = (row) => {
       })
   })
 }
+const deleteVueloDomestico = (row) => {
+  $q.dialog({
+    title: 'Confirmar eliminación',
+    message: `¿Estás seguro de eliminar ${row.vdnvuelo}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    vuelosdomesticos.value = vuelosdomesticos.value.filter((vuelo) => vuelo.id !== row.id)
+    api
+      .delete(`/vuelosdomesticos/${row.slug}/`)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Vuelo domestico eliminado correctamente',
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+}
 
 const clearAirports = () => {
   if (airport_search.value) {
@@ -2436,6 +2631,12 @@ const clearTiposCarros = () => {
   if (tiposcarros_search.value) {
     tiposcarros_search.value = ''
     getTiposCarros()
+  }
+}
+const clearVuelosDomesticos = () => {
+  if (vuelosdomesticos_search.value) {
+    vuelosdomesticos_search.value = ''
+    getVuelosDomesticos()
   }
 }
 
@@ -2609,6 +2810,17 @@ const getTiposCarros = async () => {
     .get(`/tiposcarros/?search=${tiposcarros_search.value}`)
     .then((response) => {
       tiposcarros.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+const getVuelosDomesticos = async () => {
+  api
+    .get(`/vuelosdomesticos/?search=${vuelosdomesticos_search.value}`)
+    .then((response) => {
+      vuelosdomesticos.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {
