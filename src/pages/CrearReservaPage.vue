@@ -13,11 +13,15 @@
                     <q-select
                       filled
                       v-model="datosgenerales.RORIGENDELARESERVA"
-                      :options="opcionesEstado"
+                      :options="opcionesReservas"
                       label="Origen de la Reserva"
                       dense
                       emit-value
                       map-options
+                      option-value="id"
+                      option-label="ONOMBRE"
+                      ref="refRORIGENDELARESERVA"
+                      :rules="[(val) => !!val || 'Valor requerido']"
                     />
                   </div>
                   <div class="col-12 col-sm-6 col-md-3">
@@ -39,6 +43,8 @@
                       label="Fecha de Solicitud"
                       type="date"
                       dense
+                      ref="refRFSOLICITUD"
+                      :rules="[(val) => (val !== null && val !== '') || 'La fecha es requerida']"
                     />
                   </div>
                 </div>
@@ -48,11 +54,15 @@
                     <q-select
                       filled
                       v-model="datosgenerales.RDESTINO"
-                      :options="opcionesEstado"
+                      :options="opcionesPolos"
                       label="Polo Inicial"
                       dense
                       emit-value
                       map-options
+                      option-value="id"
+                      option-label="DESTINO"
+                      ref="refRDESTINO"
+                      :rules="[(val) => !!val || 'Valor requerido']"
                     />
                   </div>
                   <div class="col-12 col-sm-6 col-md-3">
@@ -133,8 +143,20 @@
               </div>
 
               <div class="row justify-end q-mt-md">
-                <q-btn color="red-10" label="Agregar" icon="add" class="q-mr-md" />
-                <q-btn color="grey" label="Limpiar" outline />
+                <q-btn
+                  color="red-10"
+                  label="Agregar"
+                  icon="add"
+                  @click="addReserva()"
+                  class="q-mr-md"
+                />
+                <q-btn
+                  @click="backReservas()"
+                  color="grey"
+                  icon="arrow_back"
+                  label="Regresar"
+                  outline
+                />
               </div>
             </div>
           </div>
@@ -145,7 +167,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
+import { api } from 'boot/axios'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const datosgenerales = ref({
   RORIGENDELARESERVA: '',
@@ -161,11 +187,72 @@ const datosgenerales = ref({
   RFSERVICIO: '',
 })
 
+const refRORIGENDELARESERVA = ref(null)
+const refRDESTINO = ref(null)
+const refRFSOLICITUD = ref(null)
+
+onMounted(() => {
+  getOrigenReservas()
+  getPolos()
+
+  nextTick(() => {
+    refRORIGENDELARESERVA.value.focus()
+  })
+})
+
 const opcionesEstado = [
   { label: 'Confirmada', value: 'Confirmada' },
   { label: 'Pendiente', value: 'Pendiente' },
   { label: 'Cancelada', value: 'Cancelada' },
 ]
+
+const opcionesReservas = ref([])
+const opcionesPolos = ref([])
+
+const validateInput = () => {
+  refRORIGENDELARESERVA.value.validate()
+  refRDESTINO.value.validate()
+  refRFSOLICITUD.value.validate()
+  return (
+    datosgenerales.value.RORIGENDELARESERVA &&
+    datosgenerales.value.RDESTINO &&
+    datosgenerales.value.RFSOLICITUD
+  )
+}
+
+const backReservas = () => {
+  router.push('/reservas/')
+}
+
+const getOrigenReservas = async () => {
+  api
+    .get(`/origenreservas/`)
+    .then((response) => {
+      opcionesReservas.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const getPolos = async () => {
+  api
+    .get(`/destpesca/`)
+    .then((response) => {
+      opcionesPolos.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const addReserva = () => {
+  if (validateInput()) {
+    //
+  }
+}
 </script>
 <style>
 .page-container {
