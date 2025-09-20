@@ -25,13 +25,20 @@
                     />
                   </div>
                   <div class="col-12 col-sm-6 col-md-3">
-                    <q-input v-model="datosgenerales.RCSOLICITUD" filled label="Nº. Ref." dense />
+                    <q-input
+                      v-model="datosgenerales.RCSOLICITUD"
+                      filled
+                      type="number"
+                      label="Nº. Ref."
+                      dense
+                    />
                   </div>
                   <div class="col-12 col-sm-6 col-md-3">
                     <q-input
                       v-model="datosgenerales.RCORIGENDELARESERVA"
                       filled
                       label="Nº. Solicitud"
+                      type="number"
                       dense
                     />
                   </div>
@@ -69,17 +76,22 @@
                     <q-select
                       filled
                       v-model="datosgenerales.ROPERADOR"
-                      :options="opcionesEstado"
+                      :options="opcionesOperadores"
                       label="Operador"
                       dense
                       emit-value
                       map-options
+                      option-value="id"
+                      option-label="OPERADOR"
+                      ref="refROPERADOR"
+                      :rules="[(val) => !!val || 'Valor requerido']"
                     />
                   </div>
                   <div class="col-12 col-sm-6 col-md-3">
                     <q-input
                       v-model="datosgenerales.RCDADOXOPERADOR"
                       filled
+                      maxlength="50"
                       label="Código Según Operador"
                       dense
                     />
@@ -88,11 +100,15 @@
                     <q-select
                       filled
                       v-model="datosgenerales.RAGENCIA"
-                      :options="opcionesEstado"
+                      :options="opcionesAgencias"
                       label="Agencia"
                       dense
                       emit-value
                       map-options
+                      option-value="id"
+                      option-label="AGENCIA"
+                      ref="refRAGENCIA"
+                      :rules="[(val) => !!val || 'Valor requerido']"
                     />
                   </div>
                 </div>
@@ -103,10 +119,21 @@
                       filled
                       label="Nombre del Grupo"
                       dense
+                      maxlength="50"
+                      ref="refRNOMBRE"
+                      :rules="[(val) => !!val || 'Valor requerido']"
                     />
                   </div>
                   <div class="col-12 col-sm-6 col-md-3">
-                    <q-input v-model="datosgenerales.RCANTPAXPREV" filled label="PAX" dense />
+                    <q-input
+                      v-model="datosgenerales.RCANTPAXPREV"
+                      filled
+                      label="PAX"
+                      dense
+                      type="number"
+                      ref="refRCANTPAXPREV"
+                      :rules="[(val) => !!val || 'Valor requerido']"
+                    />
                   </div>
                   <div class="col-12 col-sm-6 col-md-3">
                     <q-input
@@ -116,6 +143,8 @@
                       label="Inicio de los Servicios"
                       type="date"
                       dense
+                      ref="refRISERVICIO"
+                      :rules="[(val) => (val !== null && val !== '') || 'La fecha es requerida']"
                     />
                   </div>
                   <div class="col-12 col-sm-6 col-md-3">
@@ -126,6 +155,8 @@
                       label="Fin de los Servicios"
                       type="date"
                       dense
+                      ref="refRFSERVICIO"
+                      :rules="[(val) => (val !== null && val !== '') || 'La fecha es requerida']"
                     />
                   </div>
                 </div>
@@ -136,6 +167,7 @@
                       v-model="datosgenerales.RCOMENTARIO"
                       dense
                       filled
+                      maxlength="100"
                       type="textarea"
                     />
                   </div>
@@ -185,38 +217,55 @@ const datosgenerales = ref({
   RNOMBRE: '',
   RCANTPAXPREV: '',
   RFSERVICIO: '',
+  RISERVICIO: '',
 })
 
 const refRORIGENDELARESERVA = ref(null)
 const refRDESTINO = ref(null)
 const refRFSOLICITUD = ref(null)
+const refROPERADOR = ref(null)
+const refRAGENCIA = ref(null)
+const refRNOMBRE = ref(null)
+const refRCANTPAXPREV = ref(null)
+const refRISERVICIO = ref(null)
+const refRFSERVICIO = ref(null)
 
 onMounted(() => {
   getOrigenReservas()
   getPolos()
+  getOperadores()
+  getAgencias()
 
   nextTick(() => {
     refRORIGENDELARESERVA.value.focus()
   })
 })
 
-const opcionesEstado = [
-  { label: 'Confirmada', value: 'Confirmada' },
-  { label: 'Pendiente', value: 'Pendiente' },
-  { label: 'Cancelada', value: 'Cancelada' },
-]
-
 const opcionesReservas = ref([])
 const opcionesPolos = ref([])
+const opcionesOperadores = ref([])
+const opcionesAgencias = ref([])
 
 const validateInput = () => {
   refRORIGENDELARESERVA.value.validate()
   refRDESTINO.value.validate()
   refRFSOLICITUD.value.validate()
+  refROPERADOR.value.validate()
+  refRAGENCIA.value.validate()
+  refRNOMBRE.value.validate()
+  refRCANTPAXPREV.value.validate()
+  refRISERVICIO.value.validate()
+  refRFSERVICIO.value.validate()
   return (
     datosgenerales.value.RORIGENDELARESERVA &&
     datosgenerales.value.RDESTINO &&
-    datosgenerales.value.RFSOLICITUD
+    datosgenerales.value.RFSOLICITUD &&
+    datosgenerales.value.ROPERADOR &&
+    datosgenerales.value.RAGENCIA &&
+    datosgenerales.value.RNOMBRE &&
+    datosgenerales.value.RCANTPAXPREV &&
+    datosgenerales.value.RISERVICIO &&
+    datosgenerales.value.RFSERVICIO
   )
 }
 
@@ -241,6 +290,30 @@ const getPolos = async () => {
     .get(`/destpesca/`)
     .then((response) => {
       opcionesPolos.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const getOperadores = async () => {
+  api
+    .get(`/operadores/`)
+    .then((response) => {
+      opcionesOperadores.value = response.data
+      //this.totalRows = this.operators.length
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const getAgencias = async () => {
+  api
+    .get(`/agencias/`)
+    .then((response) => {
+      opcionesAgencias.value = response.data
       //this.totalRows = this.operators.length
     })
     .catch((error) => {
