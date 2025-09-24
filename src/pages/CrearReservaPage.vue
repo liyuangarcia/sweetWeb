@@ -201,9 +201,12 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import { api } from 'boot/axios'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
 const router = useRouter()
+const $q = useQuasar()
+const route = useRoute()
 
 const datosgenerales = ref({
   RORIGENDELARESERVA: '',
@@ -212,12 +215,16 @@ const datosgenerales = ref({
   ROPERADOR: '',
   RCDADOXOPERADOR: '',
   RAGENCIA: '',
-  RCSOLICITUD: '',
-  RCORIGENDELARESERVA: '',
+  RCSOLICITUD: 0,
+  RCORIGENDELARESERVA: 0,
   RNOMBRE: '',
   RCANTPAXPREV: '',
   RFSERVICIO: '',
   RISERVICIO: '',
+  REXCLUSIVA: false,
+  bloqueada: false,
+  rPROTEGIDA: false,
+  rcerrada: false,
 })
 
 const refRORIGENDELARESERVA = ref(null)
@@ -239,6 +246,14 @@ onMounted(() => {
   nextTick(() => {
     refRORIGENDELARESERVA.value.focus()
   })
+})
+
+const slug = ref(route.params.slug)
+const props = defineProps({
+  isEditing: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const opcionesReservas = ref([])
@@ -321,9 +336,46 @@ const getAgencias = async () => {
     })
 }
 
-const addReserva = () => {
+const addReserva = async () => {
   if (validateInput()) {
-    //
+    if (props.isEditing) {
+      try {
+        const response = await api.put(`/datosgenerales/${slug.value}/`, datosgenerales.value)
+
+        $q.notify({
+          type: 'positive',
+          message: '¡Datos generales de la Reserva actualizada correctamente!',
+          caption: 'Datos generales de la Reserva',
+        })
+
+        backReservas()
+        return response.data
+      } catch (error) {
+        console.error('Error actualizando Datos generales de la Reserva:', error)
+
+        $q.notify({
+          type: 'negative',
+          message: 'Error al actualizar Datos generales de la Reserva',
+          caption: error.response?.data?.message || 'Intenta nuevamente',
+        })
+
+        throw error // Puedes opcionalmente relanzar el error
+      }
+    } else {
+      api
+        .post(`/datosgenerales/`, datosgenerales.value)
+        .then(() => {
+          $q.notify({
+            type: 'positive',
+            message: '¡Creado Datos generales de la Reserva correctamente!',
+            caption: 'Datos generales de la Reserva',
+          })
+          backReservas()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }
 }
 </script>

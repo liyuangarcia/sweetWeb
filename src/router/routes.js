@@ -23,6 +23,9 @@ const routes = [
         path: '/crearreserva',
         component: () => import('src/pages/CrearReservaPage.vue'),
         meta: { requiresAuth: true },
+        props: {
+          isEditing: false,
+        },
       },
       {
         path: '/maintenance/:tabName/:exItem',
